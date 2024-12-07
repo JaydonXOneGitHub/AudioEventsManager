@@ -55,12 +55,12 @@ func switch_segments(segment_index: int) -> void:
 
 	_current_segment = segments[segment_index]
 
-	if _current_segment:
+	if _is_situation_valid():
 		audio_player.seek(_current_segment.start)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if _current_segment and audio_player.playing:
+	if _is_situation_valid():
 		if audio_player.get_playback_position() > _current_segment.end:
 			if _current_segment.stops_audio:
 				stop()
@@ -74,3 +74,7 @@ func _process(_delta: float) -> void:
 					switch_segments(next_index)
 				else:
 					stop()  # End playback after the last segment
+
+func _is_situation_valid() -> bool:
+	return _current_segment and audio_player.playing
+
